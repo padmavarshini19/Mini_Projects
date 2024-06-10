@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Notes</h1>
+        <button class="btn">Create notes</button>
+        <div class="notes-container">
+          <!-- <p contenteditable="true" class="input-box">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkkWuG5HSPUF8Ah2J8uL9UVBG08uYaK1kTRA&s">
+            </p>-->
+        </div>
+    </div>
+</body>
+<style>
+    *{margin:0;
+    padding:0;
+    font-family: 'Poppins',sans-serif;
+    box-sizing: border-box;
+    }
+    .container{
+        width: 100%;
+        min-height: 100vh;
+        background: linear-gradient(135deg,#cf9aff,#95c0ff);
+        color: #fff;
+        padding-top: 4%;
+        padding-left: 10vh;
+
+    }
+    .container h1{
+        display: flex;
+        align-items: center;
+        font-size: 35px;
+        font-weight: 600;
+    }
+    .container h1 img{
+        width: 60px;
+    }
+    .container button{
+        background-color: #500572;
+        color: white;
+        border: 2px black solid;
+        cursor:pointer;
+        border-radius: 40px;
+        margin-top: 2%;
+        display: flex;
+        align-items: center;
+        padding: 15px 25px;
+        outline: 0;
+        font-size: 16px;
+    }
+    .container button:hover{
+        background-color: #9730ce;
+        color: black;
+
+    }
+.input-box{
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    min-height: 150px;
+    background: #fff;
+    color: #333;
+    padding: 20px;
+    margin: 20px 0px;
+    border-radius: 5px;
+    outline: none;
+    box-shadow: 5px;
+   
+    
+}
+.input-box img{
+    width: 25px;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    cursor: pointer;
+}
+</style>
+<script> 
+    const notesContainer = document.querySelector(".notes-container");
+    const createBtn=document.querySelector(".btn");
+    let notes=document.querySelectorAll(".input-box");
+    function showNotes(){
+        notesContainer.innerHTML=localStorage.getItem("notes");
+    }
+    showNotes();
+
+    function updateStorage(){
+        localStorage.setItem("notes",notesContainer.innerHTML);
+    }
+    createBtn.addEventListener("click",()=>{
+        let inputBox=document.createElement("p");
+        let img=document.createElement("img");
+        inputBox.className="input-box";
+        inputBox.setAttribute("contenteditable","true");
+        img.src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkkWuG5HSPUF8Ah2J8uL9UVBG08uYaK1kTRA&s";
+        notesContainer.appendChild(inputBox).appendChild(img);
+    })
+    notesContainer.addEventListener("click",function(e){
+        if(e.target.tagName==="IMG"){
+            e.target.parentElement.remove();
+            updateStorage();
+        }
+        else if(e.target.tagName==="p"){
+            notes=document.querySelectorAll(".input-box");
+            notes.forEach(nt=>{
+                nt.onkeyup=function(){
+                updateStorage();
+                }
+            })
+        }
+
+    })
+    document.addEventListener("keydown",event=>{
+        if(event.key==="Enter"){
+            document.execCommand("insertLineBreak");
+            event.preventDefault();
+        }
+    })
+</script>
+</html>
